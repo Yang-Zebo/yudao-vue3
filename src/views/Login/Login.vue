@@ -9,7 +9,7 @@
       >
         <!-- 左上角的 logo + 系统标题 -->
         <div class="flex items-center relative text-white">
-          <img alt="" class="w-48px h-48px mr-10px" src="@/assets/imgs/logo.png" />
+          <img alt="" class="w-48px h-48px mr-10px" src="/favicon.ico" />
           <span class="text-20px font-bold">{{ underlineToHump(appStore.getTitle) }}</span>
         </div>
         <!-- 左边的背景图 + 欢迎语 -->
@@ -21,9 +21,6 @@
           >
             <img key="1" alt="" class="w-350px" src="@/assets/svgs/login-box-bg.svg" />
             <div key="2" class="text-3xl text-white">{{ t('login.welcome') }}</div>
-            <div key="3" class="mt-5 font-normal text-white text-14px">
-              {{ t('login.message') }}
-            </div>
           </TransitionGroup>
         </div>
       </div>
@@ -31,7 +28,7 @@
         <!-- 右上角的主题、语言选择 -->
         <div class="flex justify-between items-center text-white @2xl:justify-end @xl:justify-end">
           <div class="flex items-center @2xl:hidden @xl:hidden">
-            <img alt="" class="w-48px h-48px mr-10px" src="@/assets/imgs/logo.png" />
+            <img alt="" class="w-48px h-48px mr-10px" src="/favicon.ico" />
             <span class="text-20px font-bold">{{ underlineToHump(appStore.getTitle) }}</span>
           </div>
           <div class="flex justify-end items-center space-x-10px">
@@ -46,14 +43,6 @@
           >
             <!-- 账号登录 -->
             <LoginForm class="p-20px h-auto m-auto <xl:(rounded-3xl light:bg-white)" />
-            <!-- 手机登录 -->
-            <MobileForm class="p-20px h-auto m-auto <xl:(rounded-3xl light:bg-white)" />
-            <!-- 二维码登录 -->
-            <QrCodeForm class="p-20px h-auto m-auto <xl:(rounded-3xl light:bg-white)" />
-            <!-- 注册 -->
-            <RegisterForm class="p-20px h-auto m-auto <xl:(rounded-3xl light:bg-white)" />
-            <!-- 三方登录 -->
-            <SSOLoginVue class="p-20px h-auto m-auto <xl:(rounded-3xl light:bg-white)" />
           </div>
         </Transition>
       </div>
@@ -68,7 +57,7 @@ import { useAppStore } from '@/store/modules/app'
 import { ThemeSwitch } from '@/layout/components/ThemeSwitch'
 import { LocaleDropdown } from '@/layout/components/LocaleDropdown'
 
-import { LoginForm, MobileForm, QrCodeForm, RegisterForm, SSOLoginVue } from './components'
+import { LoginForm } from './components'
 
 const { t } = useI18n()
 const appStore = useAppStore()

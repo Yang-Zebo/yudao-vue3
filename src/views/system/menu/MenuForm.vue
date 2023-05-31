@@ -164,7 +164,7 @@ const open = async (type: string, id?: number, parentId?: number) => {
   if (id) {
     formLoading.value = true
     try {
-      formData.value = await MenuApi.getMenu(id)
+      formData.value = (await MenuApi.getMenu(id)) ?? {}
     } finally {
       formLoading.value = false
     }
