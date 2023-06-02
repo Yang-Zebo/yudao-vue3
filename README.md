@@ -1,39 +1,3 @@
-**严肃声明：现在、未来都不会有商业版本，所有代码全部开源!！**
-
-**「我喜欢写代码，乐此不疲」**  
-**「我喜欢做开源，以此为乐」**
-
-我 🐶 在上海艰苦奋斗，早中晚在 top3 大厂认真搬砖，夜里为开源做贡献。
-
-如果这个项目让你有所收获，记得 Star 关注哦，这对我是非常不错的鼓励与支持。
-
-## 🐶 新手必读
-
-* nodejs > 16.0.0 && pnpm > 7.30.0
-* 演示地址【Vue3 + element-plus】：<http://dashboard-vue3.yudao.iocoder.cn>
-* 演示地址【Vue3 + vben(ant-design-vue)】：<http://dashboard-vben.yudao.iocoder.cn>
-* 演示地址【Vue2 + element-ui】：<http://dashboard.yudao.iocoder.cn>
-* 启动文档：<https://doc.iocoder.cn/quick-start/>
-* 视频教程：<https://doc.iocoder.cn/video/>
-
-## 🐯 平台简介
-
-**芋道**，以开发者为中心，打造中国第一流的快速开发平台，全部开源，个人与企业可 100% 免费使用。
-
-* 采用 [vue-element-plus-admin](https://gitee.com/kailong110120130/vue-element-plus-admin) 实现
-* 改换 saas，自动引入等功能
-* 使用 Element Plus 免费开源的中后台模版，具备如下特性：
-
-![首页](preview/home.png)
-
-* **最新技术栈**：使用 Vue3、Vite4 等前端前沿技术开发
-* **TypeScript**: 应用程序级 JavaScript 的语言
-* **主题**: 可配置的主题
-* **国际化**：内置完善的国际化方案
-* **权限**：内置完善的动态路由权限生成方案
-* **组件**：二次封装了多个常用的组件
-* **示例**：内置丰富的示例
-
 ## 技术栈
 
 | 框架                                                                   | 说明               | 版本     |
@@ -171,18 +135,6 @@ ps：核心功能已经实现，正在对接微信小程序中...
 | 🚀  | 素材管理   | 管理公众号的图片、语音、视频等素材，支持在线播放语音、视频 |
 | 🚀  | 图文草稿箱  | 新增常用的图文素材到草稿箱，可发布到公众号         |
 | 🚀  | 图文发表记录 | 查看已发布成功的图文素材，支持删除操作           |
-
-### 商城系统
-
-建设中...
-
-![功能图](http://static.iocoder.cn/mall%20%E5%8A%9F%E8%83%BD%E5%9B%BE-min.png)
-
-![GIF 图-耐心等待](https://raw.githubusercontent.com/YunaiV/Blog/master/Mall/onemall-admin-min.gif)
-
-![GIF 图-耐心等待](https://raw.githubusercontent.com/YunaiV/Blog/master/Mall/onemall-h5-min.gif)
-
-## 🐷 演示图
 
 ### 系统功能
 

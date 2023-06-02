@@ -329,45 +329,6 @@ const remainingRouter: AppRouteRecordRaw[] = [
         }
       }
     ]
-  },
-  {
-    path: '/property',
-    component: Layout,
-    name: 'property',
-    meta: {
-      hidden: true
-    },
-    children: [
-      {
-        path: 'value/:propertyId(\\d+)',
-        component: () => import('@/views/mall/product/property/value/index.vue'),
-        name: 'ProductPropertyValue',
-        meta: { title: '商品属性值', icon: '', activeMenu: '/product/property' }
-      }
-    ]
-  },
-  {
-    path: '/product',
-    component: Layout,
-    name: 'ProductManagementEdit',
-    meta: {
-      hidden: true
-    },
-    children: [
-      {
-        path: 'productManagementAdd', // TODO @puhui999：最好拆成 add 和 edit 两个路由；添加商品；修改商品
-        component: () => import('@/views/mall/product/spu/addForm.vue'),
-        name: 'ProductManagementAdd',
-        meta: {
-          noCache: true,
-          hidden: true,
-          canTo: true,
-          icon: 'ep:edit',
-          title: '添加商品',
-          activeMenu: '/product/product-management'
-        }
-      }
-    ]
   }
 ]
 

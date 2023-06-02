@@ -218,7 +218,36 @@ export const eachTree = (treeDatas: any[], callBack: Fn, parentNode = {}) => {
  * @param {*} parentId 父节点字段 默认 'parentId'
  * @param {*} children 孩子节点字段 默认 'children'
  */
-export const handleTree = (data: any[], id?: string, parentId?: string, children?: string) => {
+export function handleTree(data: any[], id?: string, parentId?: string, children?: string) {
+  id = id || 'id'
+  parentId = parentId || 'parentId'
+  children = children || 'children'
+  // 1.定义最外层的数组
+  const tree = []
+  // 2.定义一个空对象
+  const otherObj = {}
+  // 3.遍历数组内所有对象
+  data.forEach((item) => {
+    // 3.1.给每个当前对象添加一个 children 属性, 以便存放子级对象
+    item[children as string] = []
+    // 3.2 将当前对象的 id 作为键, 与当前对象自身形成键值对
+    otherObj[item[id as string]] = item
+  })
+  // 4.再次遍历数组内所有对象
+  data.forEach((item) => {
+    // 4.1.判断每个当前对象的 pid, 如当前对象 pid 不为空, 则说明不是最上级的根对象
+    if (item[parentId as string] && otherObj[item[parentId as string]]) {
+      // 4.3.利用当前对象的 otherObj[pid] 找到 otherObj[id] 中对应当前对象的父级对象, 将当前对象添加到其对应的父级对象的 children 属性中
+      otherObj[item[parentId as string]][children].push(item)
+    } else {
+      // 4.3.当前对象 pid 如果为空, 则为树状结构的根对象
+      tree.push(item as never)
+    }
+  })
+  // 5.返回树状结构
+  return tree
+}
+/*export const handleTree = (data: any[], id?: string, parentId?: string, children?: string) => {
   if (!Array.isArray(data)) {
     console.warn('data must be an array')
     return []
@@ -264,8 +293,7 @@ export const handleTree = (data: any[], id?: string, parentId?: string, children
     }
   }
   return tree
-}
-
+}*/
 /**
  * 构造树型结构数据
  * @param {*} data 数据源
