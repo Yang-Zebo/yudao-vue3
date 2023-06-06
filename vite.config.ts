@@ -39,7 +39,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       //     changeOrigin: true,
       //     rewrite: (path) => path.replace(new RegExp(`^/admin-api`), ''),
       //   },
-      // },
+      // }
     },
     // 项目使用的vite插件。 单独提取到build/vite/plugin中管理
     plugins: createVitePlugins(),
