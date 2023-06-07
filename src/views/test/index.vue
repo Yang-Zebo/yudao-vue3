@@ -1,17 +1,14 @@
 <template>
-  <BasePage :api="incomingList" :option="option" />
+  <BaseForm :option="option" />
 </template>
 
 <script name="test" setup>
-import BasePage from '@/components/BasePage/index.vue'
-import { incomingList } from '@/api/infra/codegen'
-
+import BaseForm from '@/components/BaseForm/index.vue'
 const option = {
   columns: [
     {
       label: 'createTime',
-      prop: 'createTime',
-      isShowTableForm: true
+      prop: 'createTime'
     },
     {
       label: 'reportName',

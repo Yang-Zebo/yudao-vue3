@@ -77,12 +77,6 @@ export const getCodegenTable = (id: number) => {
   return request.get({ url: '/infra/codegen/detail?tableId=' + id })
 }
 
-export function incomingList(data) {
-  return request.get({
-    url: '/mpb/receipt-report/page',
-    params: data
-  })
-}
 // 新增代码生成表定义
 export const createCodegenTable = (data: CodegenCreateListReqVO) => {
   return request.post({ url: '/infra/codegen/create', data })
