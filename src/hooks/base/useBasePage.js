@@ -8,91 +8,7 @@ import {
   PasswordInput
 } from '@/components/FormItem'
 
-export default (option, tableData, mergeKeys, tableColSpan) => {
-  // 表格和并的方法
-  let rowSpanObj = null
-  const handleTableSpan = (mergeKeys, tableData) => {
-    const spanObj = {}
-    if (
-      mergeKeys instanceof Array &&
-      tableData instanceof Array &&
-      mergeKeys.length &&
-      tableData.length
-    ) {
-      mergeKeys.forEach((key, keyIndex) => {
-        spanObj[key] = []
-        let position = 0
-        tableData.forEach((item, index) => {
-          if (index === 0) {
-            spanObj[key].push(1)
-            position = 0
-          } else {
-            const isObj =
-              tableData[index][key] instanceof Array || tableData[index][key] instanceof Object
-            if (isKeysMerge(tableData, index, mergeKeys, keyIndex, isObj)) {
-              spanObj[key][position] += 1
-              spanObj[key].push(0)
-            } else {
-              spanObj[key].push(1)
-              position = index
-            }
-          }
-        })
-      })
-      return spanObj
-    }
-  }
-  const isKeysMerge = (tableData, index, mergeKeys, keyIndex, isObj) => {
-    if (keyIndex < 0) {
-      return true
-    }
-    if (isObj) {
-      return (
-        JSON.stringify(tableData[index][mergeKeys[keyIndex]]) ===
-          JSON.stringify(tableData[index - 1][mergeKeys[keyIndex]]) &&
-        isKeysMerge(tableData, index, mergeKeys, keyIndex - 1, isObj)
-      )
-    } else {
-      return (
-        tableData[index][mergeKeys[keyIndex]] === tableData[index - 1][mergeKeys[keyIndex]] &&
-        isKeysMerge(tableData, index, mergeKeys, keyIndex - 1, isObj)
-      )
-    }
-  }
-  const handleObjectSpanMethod = (tableObj, mergeKeys, rowspanObj) => {
-    if (mergeKeys instanceof Array && rowspanObj instanceof Object) {
-      const { column, rowIndex } = tableObj
-      for (let i = 0; i < mergeKeys.length; i++) {
-        let term = column.property === mergeKeys[i]
-        if (term) {
-          const _row = rowspanObj[mergeKeys[i]][rowIndex]
-          let _col
-          // 自定义设置合并列时使用该方法
-          if (tableColSpan && tableColSpan(tableObj)) {
-            _col = tableColSpan(tableObj)
-          } else {
-            _col = _row > 0 ? 1 : 0
-          }
-          return {
-            rowspan: _row,
-            colspan: _col
-          }
-        }
-      }
-    }
-  }
-  const tableSpanMethod = (tableObj) => {
-    return handleObjectSpanMethod(tableObj, mergeKeys, rowSpanObj)
-  }
-  watch(
-    tableData,
-    (newVal) => {
-      if (mergeKeys.length) {
-        rowSpanObj = handleTableSpan(mergeKeys, newVal)
-      }
-    },
-    { immediate: true, deep: true }
-  )
+export default (option, tableData) => {
   // 获取选项式表单项的选项
   const getOptions = (column) => {
     return option?.dic?.[column.prop] ?? column?.dic ?? []
@@ -201,7 +117,6 @@ export default (option, tableData, mergeKeys, tableColSpan) => {
     return components[type] ?? MyInput
   }
   return {
-    tableSpanMethod,
     getAttrs,
     getPlaceholder,
     validateMsg,

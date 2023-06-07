@@ -5,6 +5,7 @@
 <script name="test" setup>
 import BasePage from '@/components/BasePage/index.vue'
 import { incomingList } from '@/api/infra/codegen'
+
 const option = {
   columns: [
     {

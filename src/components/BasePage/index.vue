@@ -73,12 +73,11 @@
         <el-table
           ref="tableRef"
           v-loading="tableLoading"
-          :max-height="tableMaxHeightFlag ? 'calc(100vh - 325px)' : 'calc(100vh - 295px)'"
+          :height="tableMaxHeightFlag ? 'calc(100vh - 325px)' : 'calc(100vh - 295px)'"
           :size="size"
           :border="option?.border || true"
           :data="tableData"
           :row-class-name="rowClassName"
-          :span-method="tableSpanMethod"
           :table-layout="option?.tableLayout || 'fixed'"
           :fit="option?.fit || true"
           :header-row-style="{ backgroundColor: '#ccc' }"
@@ -200,16 +199,11 @@ const props = defineProps({
     }
   },
   rowClassName: Function,
-  mergeKeys: {
-    type: Array,
-    default: () => []
-  },
   rowClick: Function,
   selectionChange: {
     type: Function,
     default: () => []
   },
-  tableColSpan: Function,
   pageSizeList: {
     type: Array,
     default: () => {
@@ -223,14 +217,14 @@ const props = defineProps({
       return {}
     }
   },
-  initCallback: Function
+  initCallback: Function,
+  data: Array
 })
 // eslint-disable-next-line vue/no-setup-props-destructure
-const { mergeKeys, tableColSpan, option, api, mergeForm } = props
+const { option, api, mergeForm, data } = props
 let tableData = reactive([])
 const formData = reactive({})
 const {
-  tableSpanMethod,
   getAttrs,
   getPlaceholder,
   validateMsg,
@@ -239,7 +233,7 @@ const {
   dicText,
   tableValidate,
   formItemComponents
-} = useBasePage(option, tableData, mergeKeys, tableColSpan)
+} = useBasePage(option, tableData)
 const slotsKey = Object.keys(useSlots())
 const tableMaxHeightFlag = slotsKey.includes('leftBtn') || slotsKey.includes('rightBtn')
 
@@ -254,6 +248,10 @@ const page = {
 }
 const initData = async () => {
   if (option?.isShowTable === false) return
+  if (!api) {
+    tableData = data
+    return
+  }
   try {
     tableLoading.value = true
     let query
