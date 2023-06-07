@@ -15,22 +15,24 @@
             :lg="column?.span ?? option?.span ?? 6"
             :xs="24"
           >
-            <el-form-item
-              :label="column?.formLabel || column?.label"
-              :label-width="column?.labelWidth || '100px'"
-              :prop="column?.prop"
-              :rules="column?.rules || []"
-            >
-              <component
-                :is="formItemComponents(column)"
-                v-model="formData[column.prop]"
-                v-bind="getAttrs(column)"
-                :clearable="column?.isClearable || true"
-                :placeholder="getPlaceholder(column)"
-                :prop="column.prop"
-                :size="size"
-              />
-            </el-form-item>
+            <slot :name="column.prop" :formData="formData">
+              <el-form-item
+                :label="column?.formLabel || column?.label"
+                :label-width="column?.labelWidth || '100px'"
+                :prop="column?.prop"
+                :rules="column?.rules || []"
+              >
+                <component
+                  :is="formItemComponents(column)"
+                  v-model="formData[column.prop]"
+                  v-bind="getAttrs(column)"
+                  :clearable="column?.isClearable || true"
+                  :placeholder="getPlaceholder(column)"
+                  :prop="column.prop"
+                  :size="size"
+                />
+              </el-form-item>
+            </slot>
           </el-col>
           <el-col
             v-if="option?.formBtn !== false"
@@ -38,7 +40,7 @@
             :xs="24"
           >
             <el-form-item label-width="0" class="btn-form-item">
-              <slot name="formOperation">
+              <slot name="formOperation" :init="initData" :formData="formData">
                 <div style="text-align: right">
                   <el-button v-if="option?.resetBtn !== false" :size="size" @click="resetForm">
                     {{ '重置' }}
@@ -60,10 +62,10 @@
     </div>
     <div class="base-page-btn">
       <div class="page-btn-left">
-        <slot name="leftBtn" :init="initData"></slot>
+        <slot name="leftBtn" :init="initData" :formData="formData"></slot>
       </div>
       <div class="page-btn-right">
-        <slot name="rightBtn" :init="initData"></slot>
+        <slot name="rightBtn" :init="initData" :formData="formData"></slot>
       </div>
     </div>
     <div class="base-page-body">
@@ -71,7 +73,7 @@
         <el-table
           ref="tableRef"
           v-loading="tableLoading"
-          max-height="calc(100vh - 120px)"
+          :max-height="tableMaxHeightFlag ? 'calc(100vh - 325px)' : 'calc(100vh - 295px)'"
           :size="size"
           :border="option?.border || true"
           :data="tableData"
@@ -126,7 +128,7 @@
           >
             <template #default="scope">
               <slot :name="column.prop" v-bind="scope">
-                <div v-if="option?.isShowTableForm || false" class="self-input-item">
+                <div v-if="column?.isShowTableForm || false" class="self-input-item">
                   <component
                     :is="formItemComponents(column)"
                     class="iptComponent"
@@ -161,7 +163,13 @@
           <!-- 操作列 -->
           <el-table-column v-if="option?.operation !== false" label="操作">
             <template #default="scope">
-              <slot name="operation" v-bind="scope" :tableValidate="tableValidate"></slot>
+              <slot
+                name="operation"
+                v-bind="scope"
+                :tableValidate="tableValidate"
+                :init="initData"
+                :formData="formData"
+              ></slot>
             </template>
           </el-table-column>
         </el-table>
@@ -186,12 +194,6 @@ import useBasePage from '@/hooks/base/useBasePage'
 
 const props = defineProps({
   option: {
-    type: Object,
-    default: () => {
-      return {}
-    }
-  },
-  formData: {
     type: Object,
     default: () => {
       return {}
@@ -224,8 +226,9 @@ const props = defineProps({
   initCallback: Function
 })
 // eslint-disable-next-line vue/no-setup-props-destructure
-const { mergeKeys, tableColSpan, option, api, mergeForm, formData } = props
-const tableData = ref([])
+const { mergeKeys, tableColSpan, option, api, mergeForm } = props
+let tableData = reactive([])
+const formData = reactive({})
 const {
   tableSpanMethod,
   getAttrs,
@@ -236,21 +239,19 @@ const {
   dicText,
   tableValidate,
   formItemComponents
-} = useBasePage(option, tableData.value, mergeKeys, tableColSpan)
+} = useBasePage(option, tableData, mergeKeys, tableColSpan)
+const slotsKey = Object.keys(useSlots())
+const tableMaxHeightFlag = slotsKey.includes('leftBtn') || slotsKey.includes('rightBtn')
 
 const formRef = ref(null)
 const tableRef = ref(null)
-
-const resetForm = () => {
-  formRef.value.resetFields()
-}
 const tableLoading = ref(false)
+const size = option?.size || 'default'
 const page = {
   pageNo: 1,
   pageSize: 10,
   total: 0
 }
-const size = option?.size || 'default'
 const initData = async () => {
   if (option?.isShowTable === false) return
   try {
@@ -263,12 +264,17 @@ const initData = async () => {
     }
     delete query.total
     const { list, total } = await api(query)
-    tableData.value = list
+    tableData = reactive(list)
     page.total = Number(total)
   } finally {
     tableLoading.value = false
   }
 }
+const resetForm = () => {
+  formRef.value.resetFields()
+  initData()
+}
+
 const handleSizeChange = () => {
   initData()
 }
@@ -290,29 +296,64 @@ onBeforeMount(() => {
     margin-bottom: 20px;
     background-color: #eee;
     border-radius: 5px;
+
     .el-form {
       .el-col {
         display: flex;
         align-items: center;
+
         .el-form-item {
           margin-bottom: 20px;
         }
       }
     }
   }
+
   .base-page-btn {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
   }
+
   .base-page-body {
-    .body-footer {
-      margin-top: 20px;
-      text-align: right;
-      .el-pagination {
-        justify-content: right;
+    .body-table {
+      .self-input-item {
+        .iptComponent {
+          margin-bottom: 15px;
+        }
+
+        .error-message-box {
+          position: absolute;
+          bottom: 0;
+          height: 24px;
+
+          .error-message {
+            font-size: 12px;
+            color: red;
+          }
+        }
       }
+
+      .error-enter-active,
+      .error-leave-active {
+        opacity: 1;
+        transition: opacity 0.3s ease;
+      }
+
+      .error-enter-from,
+      .error-leave-to {
+        opacity: 0;
+      }
+    }
+  }
+
+  .body-footer {
+    margin-top: 20px;
+    text-align: right;
+
+    .el-pagination {
+      justify-content: right;
     }
   }
 }

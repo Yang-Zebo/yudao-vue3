@@ -9,7 +9,8 @@ const option = {
   columns: [
     {
       label: 'createTime',
-      prop: 'createTime'
+      prop: 'createTime',
+      isShowTableForm: true
     },
     {
       label: 'reportName',
