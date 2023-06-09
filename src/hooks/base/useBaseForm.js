@@ -12,15 +12,21 @@ export default (option) => {
   const labelPosition = option?.labelPosition ?? 'right'
   // 所有表单项label宽度
   const labelWidth = option?.labelWidth ?? '80px'
+  // 表单项默认宽度
+  const itemWidth = option?.formItemWidth ?? '250px'
   // 单个表单项label的宽度， formLabelWidth 比 labelWidth 优先级高
   const formLabelWidth = (column) => {
     return column?.labelWidth ?? labelWidth
+  }
+  // 表单宽度
+  const formItemWidth = (column) => {
+    return column?.formItemWidth ?? itemWidth
   }
   const size = option?.formSize ?? option?.size ?? 'default'
   // 表单项宽度
   const formSpan = (column) => {
     if (option?.inline) return column?.span ?? option?.span ?? 6
-    return 24
+    return column?.span ?? option?.span ?? 24
   }
   // 表单项label
   const formLabel = (column) => {
@@ -86,7 +92,7 @@ export default (option) => {
   }
   // 表单项提示
   const getPlaceholder = (column) => {
-    return column?.placeholder ?? `请输入${ formLabel(column) }`
+    return column?.placeholder ?? `请输入${formLabel(column)}`
   }
   // 是否显示表单的按钮项
   const formBtn = option?.formBtn !== false
@@ -107,6 +113,7 @@ export default (option) => {
     formSpan,
     formLabel,
     formLabelWidth,
+    formItemWidth,
     getFormRules,
     formItemComponents,
     getAttrs,

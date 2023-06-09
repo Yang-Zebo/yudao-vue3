@@ -1,17 +1,17 @@
 <template>
-  <BaseForm :option="option" />
+  <BaseTable :option="option" />
 </template>
 
 <script name="test" setup>
-import BaseForm from '@/components/BaseForm/index.vue'
+import BaseTable from '@/components/BaseTable/index.vue'
 const option = {
   columns: [
     {
-      label: 'createTime',
+      label: '创建时间',
       prop: 'createTime'
     },
     {
-      label: 'reportName',
+      label: '报表名称',
       prop: 'reportName'
     }
   ]

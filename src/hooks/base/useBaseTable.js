@@ -7,6 +7,7 @@ import {
   MySelect,
   PasswordInput
 } from '@/components/FormItem'
+import { ElMessage } from 'element-plus'
 
 export default (option, tableData) => {
   // 获取选项式表单项的选项
@@ -46,13 +47,9 @@ export default (option, tableData) => {
     }
     return attrs[type] ?? {}
   }
-  // 表单项label
-  const formLabel = (column) => {
-    return column?.formLabel ?? column?.label
-  }
   // 表单项提示
   const getPlaceholder = (column) => {
-    return column?.placeholder ?? `请输入${formLabel(column)}`
+    return column?.placeholder ?? `请输入${column?.label}`
   }
   // 返回校验不通过的消息，并且设置表格数据'$validate'对象
   const validateMsg = (rules, row, prop) => {

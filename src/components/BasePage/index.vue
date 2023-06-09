@@ -73,7 +73,7 @@
         <el-table
           ref="tableRef"
           v-loading="tableLoading"
-          :height="tableMaxHeightFlag ? 'calc(100vh - 325px)' : 'calc(100vh - 295px)'"
+          :height="tableMaxHeightFlag ? 'calc(100vh - 325px)' : 'calc(100vh - 295px)'"0
           :size="size"
           :border="option?.border || true"
           :data="tableData"
@@ -254,11 +254,17 @@ const initData = async () => {
   }
   try {
     tableLoading.value = true
-    let query
+    const query = {}
+    const searchForm = {}
+    for (let key in formData) {
+      if (formData[key] !== undefined || formData[key] !== '') {
+        Reflect.set(searchForm, key, formData[key])
+      }
+    }
     if (Object.keys(mergeForm)?.length) {
-      query = { ...mergeForm, ...formData, ...page }
+      Object.assign(query, mergeForm, searchForm, page)
     } else {
-      query = { ...formData, ...page }
+      Object.assign(query, searchForm, page)
     }
     delete query.total
     const { list, total } = await api(query)

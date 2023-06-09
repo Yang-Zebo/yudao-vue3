@@ -1,6 +1,7 @@
 import router from '@/router'
 
 // 用于 router push
+//@ts-ignore
 window._hmt = window._hmt || []
 // HM_ID
 const HM_ID = import.meta.env.VITE_APP_BAIDU_CODE
@@ -20,5 +21,6 @@ router.afterEach(function (to) {
   if (!HM_ID) {
     return
   }
+  // @ts-ignore
   _hmt.push(['_trackPageview', to.fullPath])
 })

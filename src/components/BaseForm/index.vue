@@ -14,15 +14,22 @@
           :prop="column?.prop"
           :rules="config.getFormRules(column)"
         >
-          <component
-            :is="config.formItemComponents(column)"
-            v-model="formData[column.prop]"
-            v-bind="config.getAttrs(column)"
-            :clearable="config.isClearable(column)"
+          <slot
+            :name="column.prop"
+            :formData="formData"
             :placeholder="config.getPlaceholder(column)"
-            :prop="column.prop"
-            :size="config.size"
-          />
+          >
+            <component
+              :is="config.formItemComponents(column)"
+              v-model="formData[column.prop]"
+              v-bind="config.getAttrs(column)"
+              :clearable="config.isClearable(column)"
+              :placeholder="config.getPlaceholder(column)"
+              :prop="column.prop"
+              :size="config.size"
+              :style="{ width: config.formItemWidth(column) }"
+            />
+          </slot>
         </el-form-item>
       </el-col>
       <el-col v-if="config.formBtn" :span="config.btnSpan">
@@ -65,8 +72,18 @@ const props = defineProps({
     }
   }
 })
-const { option, formData } = toRefs(props)
+const emit = defineEmits(['submitHandle'])
+// eslint-disable-next-line vue/no-setup-props-destructure
+const { option, formData } = props
 const config = useBaseForm(option)
+const formRef = ref(null)
+const loading = ref(false)
+const searchBtnClick = () => {
+  emit('submitHandle', loading, formData)
+}
+const resetForm = () => {
+  formRef.value.resetFields()
+}
 </script>
 
 <style lang="scss" scoped></style>
